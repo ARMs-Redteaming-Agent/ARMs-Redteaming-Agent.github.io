@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</title>
+    <link rel="icon" type="image/x-icon" href="image/logo.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap');
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #1a0b2e 0%, #16213e 50%, #0f3460 100%);
+            background-attachment: fixed;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(220, 38, 127, 0.1), rgba(139, 69, 19, 0.1));
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(220, 38, 127, 0.2);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .logo span {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, #dc267f, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+            background: rgba(220, 38, 127, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 20px 40px;
+            text-align: center;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .main-logo {
+            height: 120px;
+            width: auto;
+            margin-right: 30px;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(220, 38, 127, 0.3);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(45deg, #dc267f, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(220, 38, 127, 0.5);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: #e0e0e0;
+            max-width: 900px;
+            margin: 20px auto 30px;
+            line-height: 1.4;
+        }
+
+        /* Warning Banner */
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(220, 38, 127, 0.2), rgba(139, 69, 19, 0.2));
+            border: 2px solid rgba(220, 38, 127, 0.4);
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin: 30px auto;
+            max-width: 700px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .warning-banner i {
+            color: #ff6b6b;
+            font-size: 24px;
+        }
+
+        .warning-banner span {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* Authors Section */
+        .authors-section {
+            margin: 40px 0;
+        }
+
+        .authors {
+            font-family: 'Raleway', sans-serif;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+
+        .affiliations {
+            font-family: 'Raleway', sans-serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: #ff6b6b;
+            line-height: 1.5;
+        }
+
+        sup {
+            font-size: 14px;
+            vertical-align: super;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(220, 38, 127, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 38, 127, 0.5);
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+
+        .button-secondary {
+            background: transparent;
+            border: 2px solid #dc267f;
+            color: #dc267f;
+        }
+
+        .button-secondary:hover {
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            color: white;
+        }
+
+        /* Section Containers */
+        .section {
+            max-width: 1300px;
+            margin: 60px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(220, 38, 127, 0.1), rgba(139, 69, 19, 0.1));
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(220, 38, 127, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at top right, rgba(220, 38, 127, 0.1), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(255, 107, 107, 0.1), transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #dc267f, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Abstract Text */
+        .abstract-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #e0e0e0;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .abstract-text strong {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        /* Key Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(220, 38, 127, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc267f, #ff6b6b);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(220, 38, 127, 0.3);
+            border-color: rgba(220, 38, 127, 0.5);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(220, 38, 127, 0.3);
+        }
+
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .feature-description {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .result-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(220, 38, 127, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc267f, #ff6b6b);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(220, 38, 127, 0.3);
+        }
+
+        .result-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #dc267f, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .result-description {
+            color: #cccccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Authors Grid */
+        .authors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .author-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #dc267f;
+            transition: all 0.3s ease;
+        }
+
+        .author-card:hover {
+            transform: translateX(10px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .author-institution {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .author-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .author-list li {
+            color: #e0e0e0;
+            padding: 5px 0;
+            font-size: 16px;
+        }
+
+        /* Figure Container */
+        .figure-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .figure-container img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(220, 38, 127, 0.2);
+        }
+
+        .figure-container:hover img {
+            transform: scale(1.02);
+            box-shadow: 0 20px 45px rgba(220, 38, 127, 0.3);
+        }
+
+        .figure-caption {
+            font-family: 'Raleway', sans-serif;
+            font-size: 16px;
+            color: #cccccc;
+            max-width: 900px;
+            margin: 20px auto;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .figure-caption strong {
+            color: #ff6b6b;
+        }
+
+        /* BibTeX Section */
+        .bibtex-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid rgba(220, 38, 127, 0.2);
+        }
+
+        .bibtex-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        pre {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            color: #ffffff;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid rgba(220, 38, 127, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, rgba(220, 38, 127, 0.1), rgba(139, 69, 19, 0.1));
+            padding: 60px 0 40px;
+            text-align: center;
+            margin-top: 80px;
+            border-top: 1px solid rgba(220, 38, 127, 0.2);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #dc267f, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 24px;
+            padding: 15px;
+            border-radius: 50%;
+            background: rgba(220, 38, 127, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(220, 38, 127, 0.3);
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(220, 38, 127, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 48px;
+            }
+
+            .subtitle {
+                font-size: 24px;
+            }
+
+            .main-logo {
+                height: 80px;
+                margin-right: 15px;
+                margin-bottom: 20px;
+            }
+
+            .main-title {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .section {
+                padding: 20px;
+                margin: 30px auto;
+            }
+
+            .features-grid,
+            .results-grid,
+            .authors-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Smooth animations */
+        * {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="image/logo.png" alt="ARMs Logo">
+                <span>ARMs</span>
+            </div>
+            <div class="nav-links">
+                <a href="#abstract">Abstract</a>
+                <a href="#features">Features</a>
+                <a href="#results">Results</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#figures">Figures</a>
+                <a href="#paper">Paper</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="main-title">
+                <img src="image/logo.png" alt="ARMs Logo" class="main-logo">
+                <h1>ARMs</h1>
+            </div>
+            <h2 class="subtitle">Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</h2>
+            
+            <div class="authors-section">
+                <p class="authors">
+                    Zhaorun Chen<sup>1</sup>, Xun Liu<sup>2</sup>, Mintong Kang<sup>2</sup>, Jiawei Zhang<sup>1</sup>, Minzhou Pan<sup>3</sup>, Shuang Yang<sup>4</sup>, Bo Li<sup>1,2,3</sup>
+                </p>
+                <div class="affiliations">
+                    <p><sup>1</sup>University of Chicago, <sup>2</sup>University of Illinois Urbana-Champaign, <sup>3</sup>Virtue AI, <sup>4</sup>Meta</p>
+                </div>
+            </div>
+
+            <div class="warning-banner">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><strong>WARNING:</strong> This paper contains content that may be offensive and disturbing in nature.</span>
+            </div>
+
+            <div class="buttons">
+                <a href="paper_material/neurips_2025.pdf" class="button" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Read Paper
+                </a>
+                <a href="#code" class="button button-secondary">
+                    <i class="fab fa-github"></i> Code (Coming Soon)
+                </a>
+                <a href="#dataset" class="button button-secondary">
+                    <i class="fas fa-database"></i> ARMs-Bench Dataset
+                </a>
+            </div>
+        </div>
+
+        <!-- Abstract Section -->
+        <div class="section" id="abstract">
+            <div class="section-content">
+                <h2 class="section-title">Abstract</h2>
+                <div class="abstract-text">
+                    As vision-language models (VLMs) gain prominence, they introduce new unknown vulnerabilities rooted in their multimodal nature, making their safety evaluation challenging and critical. Existing red-teaming efforts are either restricted to a narrow set of adversarial patterns or depend heavily on manual engineering, lacking scalable exploration of emerging real-world adversarial strategies.
+                </div>
+                <div class="abstract-text">
+                    To bridge this gap, we propose <strong>ARMs</strong>, an adaptive red-teaming agent that systematically conducts red teaming attacks for comprehensive risk assessment for VLMs. Given a target harmful behavior or risk definition, ARMs automatically optimizes diverse red-teaming strategies to effectively elicit harmful outputs from target VLMs. Built on the model context protocol (MCP), ARMs flexibly integrates 15+ novel multimodal attack strategies, covering diverse adversarial patterns of VLMs (e.g., <em>typographic</em>, <em>contextual cloaking</em>).
+                </div>
+                <div class="abstract-text">
+                    Extensive experiments on different instance-based benchmarks and policy-based safety evaluations show that ARMs achieves SOTA attack success rate (ASR), improving ASR by <strong>27.5%</strong> on average compared to existing baselines and even exceeding <strong>90% ASR</strong> on Claude-3.7-Sonnet, a constitutionally-aligned model widely recognized for its robustness.
+                </div>
+            </div>
+        </div>
+
+        <!-- Authors Section -->
+        <div class="section" id="authors">
+            <div class="section-content">
+                <h2 class="section-title">Research Team</h2>
+                <div style="text-align: center; max-width: 1000px; margin: 0 auto;">
+                    <p class="authors" style="font-family: 'Raleway', sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 20px; color: #e0e0e0; line-height: 1.6;">
+                        Zhaorun Chen<sup>1</sup>, Xun Liu<sup>2</sup>, Mintong Kang<sup>2</sup>, Jiawei Zhang<sup>1</sup>, Minzhou Pan<sup>3</sup>, Shuang Yang<sup>4</sup>, Bo Li<sup>1,2,3</sup>
+                    </p>
+                    <div class="affiliations" style="font-family: 'Raleway', sans-serif; font-size: 18px; font-weight: 300; color: #ff6b6b; line-height: 1.8;">
+                        <p><sup>1</sup>University of Chicago</p>
+                        <p><sup>2</sup>University of Illinois Urbana-Champaign</p>
+                        <p><sup>3</sup>Virtue AI</p>
+                        <p><sup>4</sup>Meta</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authors section removed as requested -->
+
+        <!-- Key Features Section -->
+        <div class="section" id="features">
+            <div class="section-content">
+                <h2 class="section-title">Why ARMs?</h2>
+                <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 1000px; margin: 0 auto;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="feature-title">Plug-and-Play Architecture</div>
+                        <div class="feature-description">
+                            Built on Model Context Protocol (MCP) with 15+ attack strategies covering diverse adversarial patterns like typographic, contextual cloaking, and visual perturbation.
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="feature-title">Adaptive Memory System</div>
+                        <div class="feature-description">
+                            Layered memory module with ε-greedy exploration algorithm that intelligently balances attack diversity and efficiency for comprehensive red-teaming.
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-title">SOTA Performance</div>
+                        <div class="feature-description">
+                            Achieves 90%+ ASR on Claude-3.7-Sonnet and 27.5% improvement over baselines with 95.83% diversity enhancement across 30K test cases.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="section" id="results">
+            <div class="section-content">
+                <h2 class="section-title">Key Achievements</h2>
+                <div class="results-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto;">
+                    <div class="result-card">
+                        <div class="result-number">90%+</div>
+                        <div class="result-label">Attack Success Rate</div>
+                        <div class="result-description">On Claude-3.7-Sonnet across multiple evaluations</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">27.5%</div>
+                        <div class="result-label">Average Improvement</div>
+                        <div class="result-description">Over existing state-of-the-art baselines</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">30K</div>
+                        <div class="result-label">Red-teaming Cases</div>
+                        <div class="result-description">In ARMs-Bench across 71 risk categories</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">95.83%</div>
+                        <div class="result-label">Diversity Improvement</div>
+                        <div class="result-description">In generated red-teaming instances vs. X-Teaming</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Overview -->
+        <div class="section" id="architecture">
+            <div class="section-content">
+                <h2 class="section-title">System Architecture</h2>
+                <div class="figure-container">
+                    <img src="image/pipeline.png" alt="ARMs Framework Overview">
+                    <div class="figure-caption">
+                        <strong>ARMs Architecture:</strong> The system pipeline showing how ARMs generates diverse red-teaming instances through layered memory queries, composes multimodal attack strategies via MCP, and iteratively refines attacks using ε-greedy exploration until successful vulnerability discovery.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Gallery -->
+        <div class="section" id="figures">
+            <div class="section-content">
+                <h2 class="section-title">Key Results</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                    <div class="figure-container">
+                        <img src="image/main_result.png" alt="Main Results">
+                        <div class="figure-caption">
+                            <strong>Performance Comparison:</strong> ARMs demonstrates superior attack success rates across multiple VLMs and benchmarks, significantly outperforming existing red-teaming methods with consistent improvements.
+                        </div>
+                    </div>
+                    
+                    <div class="figure-container">
+                        <img src="image/case_study.jpg" alt="Case Study Example">
+                        <div class="figure-caption">
+                            <strong>Real-world Application:</strong> Example of ARMs successfully generating policy-based attacks that expose vulnerabilities in state-of-the-art VLMs across different regulatory frameworks.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Assessment Heatmap -->
+        <div class="section">
+            <div class="section-content">
+                <h2 class="section-title">Comprehensive Risk Assessment</h2>
+                <div class="figure-container">
+                    <img src="image/heatmap_by_category.png" alt="Attack Success Rate Heatmap">
+                    <div class="figure-caption">
+                        <strong>Risk Category Analysis:</strong> Attack success rate heatmap across 71 diverse risk categories, demonstrating ARMs' superior performance in uncovering vulnerabilities across different safety scenarios compared to existing baselines. Darker colors indicate higher attack success rates.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paper Section -->
+        <div class="section" id="paper">
+            <div class="section-content">
+                <h2 class="section-title">Paper & Resources</h2>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <p style="font-size: 18px; color: #e0e0e0; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+                        This work has been submitted to NeurIPS 2025. The paper presents a comprehensive approach to multimodal model safety evaluation with extensive experiments across multiple benchmarks and real-world policy assessments.
+                    </p>
+                </div>
+                
+                <div class="bibtex-container">
+                    <div class="bibtex-title">BibTeX Citation</div>
+                    <pre><code>@article{chen2024arms,
+  title={ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks},
+  author={Chen, Zhaorun and Liu, Xun and Kang, Mintong and Zhang, Jiawei and Pan, Minzhou and Yang, Shuang and Li, Bo},
+  journal={arXiv preprint},
+  year={2024}
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">ARMs Research</h3>
+            <p>Advancing multimodal model safety through comprehensive red-teaming evaluation</p>
+            
+            <div class="social-links">
+                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" title="arXiv"><i class="fas fa-file-alt"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+            
+            <p style="opacity: 0.7; font-size: 14px; margin-top: 20px;">
+                © 2024 ARMs Research Team. This research is aimed at improving AI safety and should be used responsibly.
+            </p>
+        </div>
+    </div>
+
+    <!-- Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlighting
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.color = '#ffffff';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.color = '#ff6b6b';
+                }
+            });
+        });
+
+        // Add parallax effect to background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.body;
+            const speed = scrolled * 0.5;
+            parallax.style.backgroundPosition = `center ${speed}px`;
+        });
+    </script>
+</body>
+</html> 
