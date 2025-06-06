@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARMs Documentation - Adaptive Red-Teaming Agent</title>
+    <link rel="icon" type="image/x-icon" href="../image/logo5.png">
+    
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e1e5e9;
+            padding: 12px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #dc267f;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 70px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e1e5e9;
+            height: calc(100vh - 70px);
+            position: sticky;
+            top: 70px;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            padding: 0 24px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 8px 24px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-links a:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .sidebar-links a.active {
+            background-color: #fff5f8;
+            color: #dc267f;
+            border-left-color: #dc267f;
+            font-weight: 500;
+        }
+
+        .sidebar-links .subsection {
+            margin-left: 16px;
+            font-size: 13px;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 40px 40px 80px;
+            min-width: 0;
+        }
+
+        .content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .content h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 48px 0 24px;
+            line-height: 1.3;
+            border-bottom: 1px solid #e1e5e9;
+            padding-bottom: 12px;
+        }
+
+        .content h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 32px 0 16px;
+        }
+
+        .content h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 24px 0 12px;
+        }
+
+        .content p {
+            margin-bottom: 16px;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .content ul {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+
+        .content strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .content em {
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .toc h3 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+            color: #1a1a1a;
+        }
+
+        .toc ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #dc267f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code Blocks */
+        pre[class*="language-"] {
+            background: #f6f8fa !important;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        pre {
+            background: #f6f8fa !important;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        code[class*="language-"] {
+            color: #24292f !important;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        pre code {
+            color: #24292f !important;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Override Prism theme colors for better contrast */
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata {
+            color: #6a737d !important;
+        }
+
+        .token.punctuation {
+            color: #24292f !important;
+        }
+
+        .token.property,
+        .token.tag,
+        .token.boolean,
+        .token.number,
+        .token.constant,
+        .token.symbol,
+        .token.deleted {
+            color: #005cc5 !important;
+        }
+
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.inserted {
+            color: #032f62 !important;
+        }
+
+        .token.operator,
+        .token.entity,
+        .token.url,
+        .language-css .token.string,
+        .style .token.string {
+            color: #24292f !important;
+        }
+
+        .token.atrule,
+        .token.attr-value,
+        .token.keyword {
+            color: #d73a49 !important;
+        }
+
+        .token.function,
+        .token.class-name {
+            color: #6f42c1 !important;
+        }
+
+        .token.regex,
+        .token.important,
+        .token.variable {
+            color: #e36209 !important;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ffffff;
+            color: #656d76;
+            border: 1px solid #d1d9e0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 1;
+        }
+
+        .copy-button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+            color: #374151;
+        }
+
+        /* Line numbers */
+        .line-numbers-rows {
+            border-right: 1px solid #e1e5e9;
+            padding-right: 12px;
+            margin-right: 12px;
+        }
+
+        /* Inline Code */
+        code {
+            background: #f1f5f9;
+            color: #dc267f;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Ensure inline code doesn't get overridden */
+        :not(pre) > code {
+            background: #f1f5f9 !important;
+            color: #dc267f !important;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-left: 4px solid;
+        }
+
+        .alert.info {
+            background: #ebf8ff;
+            border-left-color: #3182ce;
+            color: #2a4365;
+        }
+
+        .alert.warning {
+            background: #fffbeb;
+            border-left-color: #d69e2e;
+            color: #744210;
+        }
+
+        .alert.danger {
+            background: #fed7d7;
+            border-left-color: #e53e3e;
+            color: #742a2a;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 127, 0.1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #dc267f, #ff6b6b);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Navigation at bottom */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .page-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #dc267f;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .page-nav a:hover {
+            background: #fff5f8;
+            border-color: #dc267f;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid #e1e5e9;
+            }
+
+            .content {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .content h1 {
+                font-size: 36px;
+            }
+
+            .content h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="../image/logo5.png" alt="ARMs Logo">
+                ARMs Documentation
+            </a>
+            <nav class="nav-links">
+                <a href="../index.html">Project Home</a>
+                <a href="https://github.com/AntiQuality/ARMs-preview" target="_blank">GitHub</a>
+                <a href="https://huggingface.co/datasets/antiquality/ARMs-Bench" target="_blank">Dataset</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-links">
+                    <li><a href="#overview" class="active">Overview</a></li>
+                    <li><a href="#why-arms">Why use ARMs</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quickstart">Quickstart</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Attack Strategy Integration</div>
+                <ul class="sidebar-links">
+                    <li><a href="attack-strategies.html">Attack as MCP Servers</a></li>
+                    <li><a href="attack-strategies.html#adding-strategies">Adding New Attack Strategies</a></li>
+                    <li><a href="attack-strategies.html#mcp-configuration">MCP Configuration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Core Components</div>
+                <ul class="sidebar-links">
+                    <li><a href="running-agent.html#memory-module">Dynamic Memory Module</a></li>
+                    <li><a href="running-agent.html">Running the Agent</a></li>
+                    <li><a href="risk-assessment.html">Risk Assessment Types</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Model Integration</div>
+                <ul class="sidebar-links">
+                    <li><a href="examples.html#victim-models">Adding Victim Models</a></li>
+                    <li><a href="examples.html#providers">Customized Providers</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Examples</div>
+                <ul class="sidebar-links">
+                    <li><a href="examples.html">Basic Examples</a></li>
+                    <li><a href="examples.html#advanced">Advanced Usage</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 id="overview">ARMs Documentation</h1>
+            
+            <p>The <strong>ARMs (Adaptive Red-Teaming Agent against Multimodal Models)</strong> is a comprehensive red-teaming framework designed to systematically evaluate the safety and robustness of vision-language models (VLMs). Built on the Model Context Protocol (MCP), ARMs provides a plug-and-play architecture for integrating diverse attack strategies and conducting thorough safety assessments.</p>
+
+            <div class="toc">
+                <h3>Table of contents</h3>
+                <ul>
+                    <li><a href="#why-arms">Why use ARMs</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quickstart">Quickstart</a></li>
+                </ul>
+            </div>
+
+            <h2 id="why-arms">Why use ARMs</h2>
+            
+            <p>ARMs addresses critical challenges in multimodal AI safety evaluation through several key innovations:</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-title">Plug-and-Play Architecture</div>
+                    <div class="feature-description">
+                        Built on Model Context Protocol (MCP) with 17+ attack strategies covering diverse adversarial patterns like typographic attacks, contextual cloaking, and visual perturbations.
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-title">Adaptive Memory System</div>
+                    <div class="feature-description">
+                        Layered memory module with ε-greedy exploration algorithm that intelligently balances attack diversity and efficiency for comprehensive red-teaming.
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">SOTA Performance</div>
+                    <div class="feature-description">
+                        Achieves 90%+ attack success rate on Claude-3.7-Sonnet and 27.5% improvement over baselines with 95.83% diversity enhancement.
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-title">Policy-Following Evaluation</div>
+                    <div class="feature-description">
+                        Supports comprehensive policy-based safety assessments aligned with real-world regulatory frameworks like EU AI Act, OWASP, and FINRA.
+                    </div>
+                </div>
+            </div>
+
+            <p>Here are the main capabilities of ARMs:</p>
+
+            <ul>
+                <li><strong>Systematic Red-teaming:</strong> Automated generation and optimization of diverse attack strategies against VLMs</li>
+                <li><strong>Memory-Driven Adaptation:</strong> Dynamic strategy selection based on historical success patterns and exploration needs</li>
+                <li><strong>Comprehensive Coverage:</strong> Evaluation across 71 risk categories with both instance-based and policy-based assessments</li>
+                <li><strong>Extensible Framework:</strong> Easy integration of new attack strategies, victim models, and evaluation metrics</li>
+                <li><strong>Real-world Alignment:</strong> Risk definitions and evaluations based on established regulatory and safety frameworks</li>
+            </ul>
+
+            <h2 id="installation">Installation</h2>
+
+            <p>ARMs requires Python 3.10+ and several dependencies for multimodal processing and model integration.</p>
+
+            <h3>Environment Setup</h3>
+
+            <p>Create and activate a conda environment:</p>
+
+            <pre><code class="language-bash">conda create -n ARMs python=3.10
+conda activate ARMs</code><button class="copy-button" onclick="copyCode(this)">Copy</button></pre>
+
+            <h3>Install Dependencies</h3>
+
+            <p>Install the required packages:</p>
+
+            <pre><code class="language-bash">pip install -r requirements.txt</code><button class="copy-button" onclick="copyCode(this)">Copy</button></pre>
+
+            <h3>Environment Configuration</h3>
+
+            <p>Set up the Python path and API keys:</p>
+
+            <pre><code class="language-bash"># Set Python path (replace with your actual path)
+export PYTHONPATH=/your_path/ARMs-preview:$PYTHONPATH
+
+# Configure API keys
+export OPENAI_API_KEY=<your_openai_key>
+export ANTHROPIC_API_KEY=<your_anthropic_key>
+export TOGETHER_API_KEY=<your_together_key></code><button class="copy-button" onclick="copyCode(this)">Copy</button></pre>
+
+            <div class="alert info">
+                <strong>Note:</strong> Make sure to replace <code>/your_path/ARMs-preview</code> with the actual path to your ARMs directory, and configure the API keys for the model providers you plan to use.
+            </div>
+
+            <h2 id="quickstart">Quickstart</h2>
+
+            <p>Here's how to get started with ARMs for red-teaming evaluation:</p>
+
+            <h3>Basic Usage</h3>
+
+            <p>Run a debug evaluation on StrongReject dataset:</p>
+
+            <pre><code class="language-bash">python -m src.main \
+    --dataset StrongReject \
+    --attacker_name 'gpt-4o-2024-11-20' \
+    --victim_name claude-3-7-sonnet-20250219 \
+    --mcp_config "attack_lib/configs/full_config.json" \
+    --instance_per_category 10 \
+    --max_actions 30 \
+    --debug</code><button class="copy-button" onclick="copyCode(this)">Copy</button></pre>
+
+            <p>This command will:</p>
+            <ul>
+                <li>Use GPT-4o as the red-teaming agent backbone</li>
+                <li>Target Claude-3.7-Sonnet as the victim model</li>
+                <li>Load all 17 attack strategies from the full configuration</li>
+                <li>Run in debug mode (first instance per category only)</li>
+                <li>Allow up to 30 actions per red-teaming session</li>
+            </ul>
+
+            <h3>Key Parameters</h3>
+
+            <ul>
+                <li><code>--dataset</code>: Choose from <code>[StrongReject, JailbreakBench, JailbreakV, OWASP, EU-AI-Act, FINRA]</code></li>
+                <li><code>--attacker_name</code>: Backbone model for the red-teaming agent (recommended: <code>'gpt-4o-2024-11-20'</code>)</li>
+                <li><code>--victim_name</code>: Target model to evaluate</li>
+                <li><code>--mcp_config</code>: Configuration file defining available attack strategies</li>
+                <li><code>--max_actions</code>: Compute budget (number of queries and tool calls allowed)</li>
+                <li><code>--debug</code>: Run on first instance per category for quick testing</li>
+            </ul>
+
+            <h3>Supported Models</h3>
+
+            <p><strong>Attacker models (backbone):</strong></p>
+            <ul>
+                <li><code>gpt-4o-2024-11-20</code> (recommended)</li>
+                <li><code>claude-3-7-sonnet-20250219</code></li>
+                <li><code>Qwen/Qwen3-8B</code> (requires local endpoint)</li>
+            </ul>
+
+            <p><strong>Victim models:</strong></p>
+            <ul>
+                <li><code>gpt-4o-2024-11-20</code></li>
+                <li><code>claude-3-7-sonnet-20250219</code></li>
+                <li><code>claude-3-5-sonnet-20241022</code></li>
+                <li><code>InternVL3-2B/8B/14B/38B</code> (requires vLLM endpoint)</li>
+            </ul>
+
+            <div class="alert warning">
+                <strong>Important:</strong> The <code>--debug</code> flag is recommended for first-time usage as it provides a quick run-through of the pipeline. Remove it for full evaluations across all instances.
+            </div>
+
+            <h3>Results Structure</h3>
+
+            <p>After running ARMs, results are saved in <code>results/&lt;timestamp&gt;/</code> with the following structure:</p>
+
+            <ul>
+                <li><code>.cache/</code> - All generated images during the process</li>
+                <li><code>messages/</code> - Conversation logs with the backbone model</li>
+                <li><code>log.json</code> - Main red-teaming process logs for each instance</li>
+                <li><code>memory.json</code> - Layered memory module contents</li>
+                <li><code>results.json</code> - Final evaluation results for each instance</li>
+            </ul>
+
+            <div class="page-nav">
+                <a href="attack-strategies.html">Next: Attack Strategy Integration →</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.previousElementSibling;
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update active sidebar link based on scroll position
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('h2[id], h3[id]');
+            const sidebarLinks = document.querySelectorAll('.sidebar-links a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop <= 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
