@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</title>
-    <link rel="icon" type="image/x-icon" href="image/logo.png">
+    <link rel="icon" type="image/x-icon" href="image/logo4.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&display=swap');
@@ -304,7 +304,7 @@
         .feature-card {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 20px;
-            padding: 30px;
+            padding: 20px;
             transition: all 0.3s ease;
             border: 1px solid rgba(220, 38, 127, 0.2);
             position: relative;
@@ -345,7 +345,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #ffffff;
             text-align: center;
         }
@@ -648,13 +648,12 @@
     <header>
         <nav>
             <div class="logo">
-                <img src="image/logo.png" alt="ARMs Logo">
+                <img src="image/logo4.png" alt="ARMs Logo">
                 <span>ARMs</span>
             </div>
             <div class="nav-links">
                 <a href="#abstract">Abstract</a>
                 <a href="#features">Features</a>
-                <a href="#results">Results</a>
                 <a href="#architecture">Architecture</a>
                 <a href="#figures">Figures</a>
                 <a href="#paper">Paper</a>
@@ -667,7 +666,7 @@
         <!-- Hero Section -->
         <div class="hero-section">
             <div class="main-title">
-                <img src="image/logo.png" alt="ARMs Logo" class="main-logo">
+                <img src="image/logo4.png" alt="ARMs Logo" class="main-logo">
                 <h1>ARMs</h1>
             </div>
             <h2 class="subtitle">Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks</h2>
@@ -681,19 +680,14 @@
                 </div>
             </div>
 
-            <div class="warning-banner">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span><strong>WARNING:</strong> This paper contains content that may be offensive and disturbing in nature.</span>
-            </div>
-
             <div class="buttons">
                 <a href="paper_material/neurips_2025.pdf" class="button" target="_blank">
                     <i class="fas fa-file-pdf"></i> Read Paper
                 </a>
-                <a href="#code" class="button button-secondary">
-                    <i class="fab fa-github"></i> Code (Coming Soon)
+                <a href="https://github.com/AntiQuality/ARMs-preview" class="button button-secondary" target="_blank">
+                    <i class="fab fa-github"></i> Code
                 </a>
-                <a href="#dataset" class="button button-secondary">
+                <a href="https://huggingface.co/datasets/antiquality/ARMs-Bench" class="button button-secondary" target="_blank">
                     <i class="fas fa-database"></i> ARMs-Bench Dataset
                 </a>
             </div>
@@ -701,9 +695,9 @@
 
         <!-- Abstract Section -->
         <div class="section" id="abstract">
-            <div class="section-content">
-                <h2 class="section-title">Abstract</h2>
-                <div class="abstract-text">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -40px;">
+                <h2 class="section-title">Overview</h2>
+                <div class="abstract-text" style="margin-bottom: -10px;">
                     As vision-language models (VLMs) gain prominence, they introduce new unknown vulnerabilities rooted in their multimodal nature, making their safety evaluation challenging and critical. Existing red-teaming efforts are either restricted to a narrow set of adversarial patterns or depend heavily on manual engineering, lacking scalable exploration of emerging real-world adversarial strategies.
                 </div>
                 <div class="abstract-text">
@@ -715,86 +709,34 @@
             </div>
         </div>
 
-        <!-- Authors Section -->
-        <div class="section" id="authors">
-            <div class="section-content">
-                <h2 class="section-title">Research Team</h2>
-                <div style="text-align: center; max-width: 1000px; margin: 0 auto;">
-                    <p class="authors" style="font-family: 'Raleway', sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 20px; color: #e0e0e0; line-height: 1.6;">
-                        Zhaorun Chen<sup>1</sup>, Xun Liu<sup>2</sup>, Mintong Kang<sup>2</sup>, Jiawei Zhang<sup>1</sup>, Minzhou Pan<sup>3</sup>, Shuang Yang<sup>4</sup>, Bo Li<sup>1,2,3</sup>
-                    </p>
-                    <div class="affiliations" style="font-family: 'Raleway', sans-serif; font-size: 18px; font-weight: 300; color: #ff6b6b; line-height: 1.8;">
-                        <p><sup>1</sup>University of Chicago</p>
-                        <p><sup>2</sup>University of Illinois Urbana-Champaign</p>
-                        <p><sup>3</sup>Virtue AI</p>
-                        <p><sup>4</sup>Meta</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Authors section removed as requested -->
-
         <!-- Key Features Section -->
         <div class="section" id="features">
-            <div class="section-content">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -10px;">
                 <h2 class="section-title">Why ARMs?</h2>
-                <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 1000px; margin: 0 auto;">
+                <div class="features-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 1400px; margin: 0 auto; gap: 25px;">
                     <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-puzzle-piece"></i>
-                        </div>
                         <div class="feature-title">Plug-and-Play Architecture</div>
                         <div class="feature-description">
                             Built on Model Context Protocol (MCP) with 15+ attack strategies covering diverse adversarial patterns like typographic, contextual cloaking, and visual perturbation.
                         </div>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
                         <div class="feature-title">Adaptive Memory System</div>
                         <div class="feature-description">
                             Layered memory module with ε-greedy exploration algorithm that intelligently balances attack diversity and efficiency for comprehensive red-teaming.
                         </div>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
                         <div class="feature-title">SOTA Performance</div>
                         <div class="feature-description">
                             Achieves 90%+ ASR on Claude-3.7-Sonnet and 27.5% improvement over baselines with 95.83% diversity enhancement across 30K test cases.
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div class="section" id="results">
-            <div class="section-content">
-                <h2 class="section-title">Key Achievements</h2>
-                <div class="results-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto;">
-                    <div class="result-card">
-                        <div class="result-number">90%+</div>
-                        <div class="result-label">Attack Success Rate</div>
-                        <div class="result-description">On Claude-3.7-Sonnet across multiple evaluations</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-number">27.5%</div>
-                        <div class="result-label">Average Improvement</div>
-                        <div class="result-description">Over existing state-of-the-art baselines</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-number">30K</div>
-                        <div class="result-label">Red-teaming Cases</div>
-                        <div class="result-description">In ARMs-Bench across 71 risk categories</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-number">95.83%</div>
-                        <div class="result-label">Diversity Improvement</div>
-                        <div class="result-description">In generated red-teaming instances vs. X-Teaming</div>
+                    <div class="feature-card">
+                        <div class="feature-title">Policy-Following Evaluation</div>
+                        <div class="feature-description">
+                            Supports comprehensive policy-based safety assessments aligned with real-world regulatory frameworks like EU AI Act, OWASP, and FINRA for compliance testing.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -802,7 +744,7 @@
 
         <!-- Architecture Overview -->
         <div class="section" id="architecture">
-            <div class="section-content">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -50px;">
                 <h2 class="section-title">System Architecture</h2>
                 <div class="figure-container">
                     <img src="image/pipeline.png" alt="ARMs Framework Overview">
@@ -815,7 +757,7 @@
 
         <!-- Results Gallery -->
         <div class="section" id="figures">
-            <div class="section-content">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -50px;">
                 <h2 class="section-title">Key Results</h2>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
@@ -838,7 +780,7 @@
 
         <!-- Risk Assessment Heatmap -->
         <div class="section">
-            <div class="section-content">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -50px;">
                 <h2 class="section-title">Comprehensive Risk Assessment</h2>
                 <div class="figure-container">
                     <img src="image/heatmap_by_category.png" alt="Attack Success Rate Heatmap">
@@ -851,17 +793,12 @@
 
         <!-- Paper Section -->
         <div class="section" id="paper">
-            <div class="section-content">
+            <div class="section-content" style="margin-top: -60px; margin-bottom: -50px;">
                 <h2 class="section-title">Paper & Resources</h2>
-                <div style="text-align: center; margin-bottom: 40px;">
-                    <p style="font-size: 18px; color: #e0e0e0; line-height: 1.6; max-width: 800px; margin: 0 auto;">
-                        This work has been submitted to NeurIPS 2025. The paper presents a comprehensive approach to multimodal model safety evaluation with extensive experiments across multiple benchmarks and real-world policy assessments.
-                    </p>
-                </div>
                 
                 <div class="bibtex-container">
                     <div class="bibtex-title">BibTeX Citation</div>
-                    <pre><code>@article{chen2024arms,
+                    <pre style="text-align: left;"><code>@article{chen2024arms,
   title={ARMs: Adaptive Red-Teaming Agent against Multimodal Models with Plug-and-Play Attacks},
   author={Chen, Zhaorun and Liu, Xun and Kang, Mintong and Zhang, Jiawei and Pan, Minzhou and Yang, Shuang and Li, Bo},
   journal={arXiv preprint},
@@ -875,18 +812,18 @@
     <!-- Footer -->
     <div class="footer">
         <div class="footer-content">
-            <h3 class="footer-title">ARMs Research</h3>
+            <h3 class="footer-title">ARMs Project</h3>
             <p>Advancing multimodal model safety through comprehensive red-teaming evaluation</p>
             
             <div class="social-links">
-                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://github.com/AntiQuality/ARMs-preview" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="#" title="arXiv"><i class="fas fa-file-alt"></i></a>
                 <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
             
             <p style="opacity: 0.7; font-size: 14px; margin-top: 20px;">
-                © 2024 ARMs Research Team. This research is aimed at improving AI safety and should be used responsibly.
+                © 2025 ARMs Project. This research is aimed at improving AI safety and should be used responsibly.
             </p>
         </div>
     </div>
